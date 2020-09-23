@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: default
+    include: common
+
+  application:
+    name: kboot-reactive-mongo
+
+
+
+  data:
+    mongodb:
+#      username: ${MONGO_DATABASE_USER}
+#      password: ${MONGO_DATABASE_PASSWORD}
+#      username: root
+#      password: bx4nC17zv3
+#      database: ${MONGO_DATABASE_NAME}
+      database: ${spring.application.name}
+
+#      uri: mongodb://${MONGO_DATABASE_USER}:${MONGO_DATABASE_PASSWORD}@mongodb/${MONGO_DATABASE_NAME}
+      uri: mongodb://root:${MONGODB_PASSWORD}@mongodb-rs-0.mongodb-rs-headless.dev.svc.cluster.local,mongodb-rs-1.mongodb-rs-headless.dev.svc.cluster.local
+
