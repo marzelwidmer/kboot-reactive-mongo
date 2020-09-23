@@ -1,18 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    // JIB
-    id("com.google.cloud.tools.jib") version "2.5.0"
     id("org.springframework.boot") version "2.3.4.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     kotlin("jvm") version "1.4.0"
     kotlin("plugin.spring") version "1.4.0"
 }
-
-jib {
-    this.to.image = "kboot-reactive-mongo:foo"
-}
-
 
 group = "ch.keepcalm"
 version = "0.0.1-SNAPSHOT"

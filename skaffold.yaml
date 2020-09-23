@@ -28,17 +28,3 @@ deploy:
   kustomize:
     paths:
     - k8s/installs/dev
-
-
-
-
-
-#build:
-#  artifacts:
-#    - image: registry.apps.c3smonkey.ch/dev/kboot-reactive-mongo
-#      jib:
-#        args:
-#          - -Dimage=registry.apps.c3smonkey.ch/dev/kboot-reactive-mongo
-#        type: gradle
-#  tagPolicy:
-#    sha256: {}
