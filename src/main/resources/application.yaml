@@ -6,6 +6,16 @@ spring:
   application:
     name: kboot-reactive-mongo
 
+---
+spring:
+  profiles: local
+  data:
+    mongodb:
+      database: sampledb
+      host: localhost
+---
+spring:
+  profiles: development
   data:
     mongodb:
       database: sampledb

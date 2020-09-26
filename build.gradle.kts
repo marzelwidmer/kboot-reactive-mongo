@@ -29,14 +29,7 @@ springBoot {
     buildInfo()
 }
 
-val arrow_version = "0.11.0"
-
 dependencies {
-    implementation("io.arrow-kt:arrow-core:$arrow_version")
-    implementation("io.arrow-kt:arrow-syntax:$arrow_version")
-    kapt("io.arrow-kt:arrow-meta:$arrow_version")
-
-
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
