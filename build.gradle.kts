@@ -28,8 +28,15 @@ extra["springCloudVersion"] = "Hoxton.SR8"
 springBoot {
     buildInfo()
 }
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor(0, "seconds")
+}
 
 dependencies {
+//    implementation("ch.keepcalm:kboot-starter:0.0.1-SNAPSHOT") {
+//        this.isChanging = false
+//    }
+
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
     implementation("org.springframework.boot:spring-boot-starter-webflux")

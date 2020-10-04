@@ -1,7 +1,5 @@
 package ch.keepcalm.kboot
 
-
-
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Bean
@@ -28,7 +26,7 @@ import javax.annotation.PostConstruct
 class KbootReactiveMongoApplication
 
 fun main(args: Array<String>) {
-	runApplication<KbootReactiveMongoApplication>(*args)
+    runApplication<KbootReactiveMongoApplication>(*args)
 }
 
 
@@ -36,24 +34,24 @@ fun main(args: Array<String>) {
 @Configuration
 class RouterConfig(private val service: PizzaService) {
 
-	@Bean
-	fun route() = router {
-		val resourceURL = "pizzas"
-		listOf(
-			GET("/$resourceURL", ::all),
-			GET("/$resourceURL/{id}", ::byId),
-			GET("/$resourceURL/{id}/orders", ::orders)
-		)
-	}
+    @Bean
+    fun route() = router {
+        val resourceURL = "pizzas"
+        listOf(
+            GET("/$resourceURL", ::all),
+            GET("/$resourceURL/{id}", ::byId),
+            GET("/$resourceURL/{id}/orders", ::orders)
+        )
+    }
 
-	fun all(req: ServerRequest) = ServerResponse.ok()
-		.body(service.getAllPizzas())
+    fun all(req: ServerRequest) = ServerResponse.ok()
+        .body(service.getAllPizzas())
 
-	fun byId(req: ServerRequest) = ServerResponse.ok()
-		.body(service.getPizzaById(id = req.pathVariable(("id"))))
+    fun byId(req: ServerRequest) = ServerResponse.ok()
+        .body(service.getPizzaById(id = req.pathVariable(("id"))))
 
-	fun orders(req: ServerRequest) = ServerResponse.ok()
-		.sse().body(service.getOrdersForPizzaId(pizzaId = req.pathVariable(("id"))))
+    fun orders(req: ServerRequest) = ServerResponse.ok()
+        .sse().body(service.getOrdersForPizzaId(pizzaId = req.pathVariable(("id"))))
 }
 
 
@@ -61,43 +59,43 @@ class RouterConfig(private val service: PizzaService) {
 @RequestMapping(value = ["/api/pizzas"])
 class PizzaController(private val service: PizzaService) {
 
-	//  http :8080/api/pizzas
-	@GetMapping
-	fun all() = service.getAllPizzas()
+    //  http :8080/api/pizzas
+    @GetMapping
+    fun all() = service.getAllPizzas()
 
-	//  http :8080/api/pizzas/f162dd0b-81af-4bbe-a4fc-a9e97181e201
-	@GetMapping(value = ["/{id}"])
-	fun byId(@PathVariable id: String) = service.getPizzaById(id = id)
+    //  http :8080/api/pizzas/f162dd0b-81af-4bbe-a4fc-a9e97181e201
+    @GetMapping(value = ["/{id}"])
+    fun byId(@PathVariable id: String) = service.getPizzaById(id = id)
 
-	// http -S  :8080/api/pizzas/f162dd0b-81af-4bbe-a4fc-a9e97181e201/orders
-	@GetMapping(value = ["/{id}/orders"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-	fun orders(@PathVariable id: String) = service.getOrdersForPizzaId(pizzaId = id)
+    // http -S  :8080/api/pizzas/f162dd0b-81af-4bbe-a4fc-a9e97181e201/orders
+    @GetMapping(value = ["/{id}/orders"], produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
+    fun orders(@PathVariable id: String) = service.getOrdersForPizzaId(pizzaId = id)
 }
 
 @Service
 class PizzaService(private val repo: PizzaRepository) {
 
-	fun getAllPizzas() = repo.findAll()
+    fun getAllPizzas() = repo.findAll()
 
-	fun getPizzaById(id: String) = repo.findById(id)
+    fun getPizzaById(id: String) = repo.findById(id)
 
-	fun getOrdersForPizzaId(pizzaId: String) = Flux.interval(Duration.ofSeconds(1))
-		.onBackpressureDrop()
-		.map { PizzaOrder(pizzaId = pizzaId, whenOrdered = Instant.now()) }
+    fun getOrdersForPizzaId(pizzaId: String) = Flux.interval(Duration.ofSeconds(1))
+        .onBackpressureDrop()
+        .map { PizzaOrder(pizzaId = pizzaId, whenOrdered = Instant.now()) }
 }
 
 @Component
 class DataLoader(private val repository: PizzaRepository) {
 
-	@PostConstruct
-	fun load() =
-		repository.deleteAll().thenMany(
-			listOf("Margherita", "Fungi", "Proscuttio", "Napoli", "Quattro Formaggio", "Calzone", "Rustica")
-				.toFlux()
-				.map { Pizza(name = it) })
-			.flatMap { repository.save(it) }
-			.thenMany(repository.findAll())
-			.subscribe { println(it) }
+    @PostConstruct
+    fun load() =
+        repository.deleteAll().thenMany(
+            listOf("Margherita", "Fungi", "Proscuttio", "Napoli", "Quattro Formaggio", "Calzone", "Rustica")
+                .toFlux()
+                .map { Pizza(name = it) })
+            .flatMap { repository.save(it) }
+            .thenMany(repository.findAll())
+            .subscribe { println(it) }
 }
 
 
@@ -107,4 +105,3 @@ data class PizzaOrder(val pizzaId: String, val whenOrdered: Instant)
 
 @Document
 data class Pizza(@Id val id: String = UUID.randomUUID().toString(), val name: String)
-
