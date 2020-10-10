@@ -6,6 +6,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 
 ```
 helm install mymongo -f values-openshift.yaml bitnami/mongodb
+```
 
 
 # Deploy
