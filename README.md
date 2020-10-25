@@ -15,7 +15,6 @@ skaffold run
 ```
 
 
-```
 ## Test
 ```
 export MONGODB_ROOT_PASSWORD=$(kubectl get secret --namespace dev mymongo-mongodb -o jsonpath="{.data.mongodb-root-password}" | base64 --decode)
